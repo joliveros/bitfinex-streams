@@ -1,6 +1,6 @@
 {
   "name": "bitfinex-streams",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Stream bitfinex websocket data",
   "main": "index.js",
   "scripts": {
