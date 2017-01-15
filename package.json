@@ -1,0 +1,52 @@
+{
+  "name": "bitfinex-streams",
+  "version": "0.0.0",
+  "description": "Stream bitfinex websocket data",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf lib dist",
+    "build": "babel src --out-dir lib",
+    "build:umd": "webpack src/index.js babel-register babel-polyfill dist/bitfinex-streams.js && NODE_ENV=production webpack src/index.js dist/bitfinex-streams.min.js",
+    "lint": "eslint src test",
+    "test": "NODE_ENV=test node_modules/.bin/mocha --compilers js:babel-register --require babel-polyfill ./src/**/*spec.js --recursive --harmony",
+    "test:watch": "NODE_ENV=test node_modules/.bin/mocha --compilers js:babel-register --require babel-polyfill --recursive ./src/**/*spec.js --watch --harmony",
+    "test:cov": "node_modules/.bin/babel-node --presets es2015 es2016 stage-0 -- --plugins transform-builtin-extend -- ./node_modules/.bin/isparta cover ./node_modules/.bin/_mocha",
+    "prepublish": "npm run lint && npm run test && npm run clean && npm run build && npm run build:umd"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joliveros/bitfinex-streams.git"
+  },
+  "keywords": [
+    "bitfinex",
+    "streams",
+    "api"
+  ],
+  "author": "joliveros",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joliveros/bitfinex-streams/issues"
+  },
+  "homepage": "https://github.com/joliveros/bitfinex-streams#readme",
+  "dependencies": {
+    "bitfinex-api-node": "^0.2.9"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-core": "^6.17.0",
+    "babel-eslint": "^7.0.0",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2017-node7": "^0.4.1",
+    "babel-register": "^6.16.3",
+    "chai-stream-es6": "0.0.2",
+    "chai": "^3.5.0",
+    "eslint-config-airbnb": "^14.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
+    "eslint-plugin-react": "^6.9.0",
+    "eslint": "^3.13.1",
+    "mocha": "^3.1.0",
+    "webpack-dev-server": "^1.8.2",
+    "webpack": "^1.9.6"
+  }
+}
