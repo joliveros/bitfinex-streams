@@ -2,7 +2,7 @@
   "name": "bitfinex-streams",
   "version": "0.0.4",
   "description": "Stream bitfinex websocket data",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "clean": "rimraf lib dist",
     "build": "babel src --out-dir lib",
