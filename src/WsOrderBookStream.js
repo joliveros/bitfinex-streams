@@ -1,12 +1,9 @@
-import BitfinexApi from 'bitfinex-api-node';
+import Websocket from 'ws';
 import { Readable } from 'stream';
 
-const {
-  BFX_API_KEY = '',
-  BFX_API_SECRET = '',
-} = process.env;
+const debug = require('debug')('bitfinex:orderbook');
 
-export default function WsOrderBookStream(CurrencyPair = 'BTCUSD') {
+export default function WsOrderBookStream(CurrencyPair = 'tBTCUSD') {
   const orderBookStream = new Readable();
   let bfxWebsocket;
   const readOrderBook = data => orderBookStream.push(JSON.stringify(data));
@@ -15,12 +12,22 @@ export default function WsOrderBookStream(CurrencyPair = 'BTCUSD') {
     if (!orderBookStream.started) {
       orderBookStream.started = true;
 
-      bfxWebsocket = new BitfinexApi(BFX_API_KEY, BFX_API_SECRET, 2).ws;
+      bfxWebsocket = new Websocket('wss://api.bitfinex.com/ws/v2');
 
       bfxWebsocket.on('open', () => {
-        bfxWebsocket.subscribeOrderBook(CurrencyPair);
+        const subscribeOptions = {
+          channel: 'book',
+          event: 'subscribe',
+          freq: 'F0',
+          prec: 'P3',
+          len: 100,
+          symbol: CurrencyPair,
+        };
 
-        bfxWebsocket.on('orderbook', readOrderBook);
+        bfxWebsocket.send(JSON.stringify(subscribeOptions));
+
+        bfxWebsocket.on('message', readOrderBook);
+        bfxWebsocket.on('message', (data) => debug(data));
         bfxWebsocket.on('error', (err) => {
           throw err;
         });
